@@ -227,6 +227,9 @@ body {
   margin-bottom: 16px;
   padding: 24px;
 }
+.cards-container .card.hidden {
+  display: none;
+}
 .cards-container .card .headline {
   font-size: 25px;
   font-family: Didot, serif;

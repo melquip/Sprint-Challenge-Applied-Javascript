@@ -22,6 +22,7 @@ axios.get('https://lambda-times-backend.herokuapp.com/articles')
 	.then(response => {
 		Object.keys(response.data.articles).forEach(tab => {
 			response.data.articles[tab].forEach(article => {
+				article.tab = tab;
 				cardsContainer.appendChild(createCard(article));
 			});
 		});
@@ -49,6 +50,7 @@ function createCard(data) {
 
 	card.appendChild(headline);
 	card.appendChild(author);
-	
+	card.setAttribute('data-topic', data.tab);
+
 	return card;
 }
