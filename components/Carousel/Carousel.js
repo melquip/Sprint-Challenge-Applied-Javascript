@@ -23,40 +23,60 @@ function createCarousel(data) {
 	const carousel = document.createElement('div');
 	carousel.classList.add('carousel');
 	
-	carousel.appendChild(createCarouselButton('left-button', ' < ',
-		function() {
-			if(carouselCurrIndex === 0) {
-				carouselCurrIndex = slides.length;
-			}
-			carouselCurrIndex--;
-			updateCarousel();
-		})
-	);
+	carousel.addEventListener('mouseleave', stopCarouselInfiniteLoop);
+	carousel.addEventListener('mouseup', stopCarouselInfiniteLoop);
+	
+	const leftBtn = createCarouselButton('left-button', ' < ');
+	leftBtn.addEventListener('mousedown', function() {
+		carouselBtnMousedown = true;
+		carouselGoBack();
+	});
+	carousel.appendChild(leftBtn);
 	data.forEach((slide, i) => {
 		const newSlide = document.createElement('img');
 		newSlide.src = slide;
 		if(i === 0) newSlide.classList.add('active');
 		carousel.appendChild(newSlide);
 	});
-	carousel.appendChild(createCarouselButton('right-button', ' > ',
-		function() {
-			if(carouselCurrIndex === slides.length - 1) {
-				carouselCurrIndex = -1;
-			}
-			carouselCurrIndex++;
-			updateCarousel();
-		})
-	);
+	const rightBtn = createCarouselButton('right-button', ' > ');
+	rightBtn.addEventListener('mousedown', function() {
+		carouselBtnMousedown = true;
+		carouselGoForth();
+	});
+	carousel.appendChild(rightBtn);
 
 	return carousel;
 }
 
-function createCarouselButton(classname, text, onclick) {
+function createCarouselButton(classname, text) {
 	const btn = document.createElement('div');
 	btn.classList.add(classname);
 	btn.textContent = text;
-	btn.addEventListener('click', onclick);
 	return btn;
+}
+function carouselGoBack() {
+	if(carouselCurrIndex === 0) {
+		carouselCurrIndex = slides.length;
+	}
+	carouselCurrIndex--;
+	updateCarousel();
+	if(carouselBtnMousedown) {
+		carouselInfiniteLoop = setTimeout(function() {
+			if(carouselBtnMousedown) carouselGoBack();
+		}, carouselInfiniteLoopTimer);
+	}
+}
+function carouselGoForth() {
+	if(carouselCurrIndex === slides.length - 1) {
+		carouselCurrIndex = -1;
+	}
+	carouselCurrIndex++;
+	updateCarousel();
+	if(carouselBtnMousedown) {
+		carouselInfiniteLoop = setTimeout(function() {
+			if(carouselBtnMousedown) carouselGoForth();
+		}, carouselInfiniteLoopTimer);
+	}
 }
 
 function updateCarousel() {
@@ -71,9 +91,17 @@ function updateCarousel() {
 	});
 }
 
+function stopCarouselInfiniteLoop() {
+	carouselBtnMousedown = false;
+	clearTimeout(carouselInfiniteLoop);
+}
+
 const carouselContainer = document.querySelector('.carousel-container');
 
 let carouselCurrIndex = 0;
+let carouselBtnMousedown = false;
+let carouselInfiniteLoop;
+const carouselInfiniteLoopTimer = 1000;
 const slides = [
 	"./assets/carousel/mountains.jpeg",
 	"./assets/carousel/computer.jpeg",
