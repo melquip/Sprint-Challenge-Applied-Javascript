@@ -1,6 +1,6 @@
 .carousel {
   .width-100();
-  .flex(center, center);
+  .flex(flex-start, center);
   height: 500px;
   position: relative;
   overflow: hidden;
@@ -15,6 +15,7 @@
     font-size: 40px;
     border-radius: 50%;
     position: absolute;
+    z-index: 10;
     width: 50px;
     height: 50px;
     cursor: pointer;
@@ -36,6 +37,12 @@
   }
   img {
     .width-100();
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .33s ease-in-out;
+    &.active {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 }
