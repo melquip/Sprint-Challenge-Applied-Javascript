@@ -10,6 +10,7 @@
 const topics = document.querySelector('.topics');
 axios.get('https://lambda-times-backend.herokuapp.com/topics')
 	.then(response => {
+		response.data.topics.unshift('All');
 		response.data.topics.forEach(topic => topics.appendChild(createTab(topic)));
 	}) 
 	.catch(error => console.error(error));
@@ -24,7 +25,7 @@ function createTab(topic) {
 		if(filter === 'node.js') filter = 'node';
 		document.querySelectorAll('[data-topic]').forEach(card => {
 			const topic = card.getAttribute('data-topic');
-			if(filter === topic) {
+			if(filter === topic || filter === 'All') {
 				card.classList.remove('hidden');
 			} else {
 				card.classList.add('hidden');
