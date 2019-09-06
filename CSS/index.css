@@ -52,6 +52,7 @@ body {
   align-items: none;
   flex-direction: row;
   position: fixed;
+  z-index: 11;
   height: 44px;
   background-color: #333;
 }
@@ -226,6 +227,7 @@ body {
   width: 380px;
   margin-bottom: 16px;
   padding: 24px;
+  transition: display 0.2s ease-in-out;
 }
 .cards-container .card.hidden {
   display: none;
